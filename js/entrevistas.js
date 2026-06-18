@@ -402,7 +402,7 @@ async function guardarEnt() {
     latitud: gpsActual?.lat || null,
     longitud: gpsActual?.lng || null,
     fecha_entrevista: new Date().toISOString(),
-    respuestas: Object.keys(respuestas).length > 0 ? respuestas : null
+    respuestas: respuestas
   };
 
   // Enviar a Supabase o encolar localmente en IndexedDB

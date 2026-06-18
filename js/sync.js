@@ -73,6 +73,11 @@ async function syncQ() {
         delete entData._qid;
         delete entData._offline;
 
+        // Corregir constraint not-null si hay registros viejos guardados con null
+        if (!entData.respuestas) {
+          entData.respuestas = {};
+        }
+
         try {
           const { error } = await sb.from('entrevistas').insert(entData);
           if (!error) {
