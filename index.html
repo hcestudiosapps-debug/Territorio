@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#7b1c3e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="RutaGuinda — Levantamiento de encuestas y monitoreo en campo">
+  <title>RutaGuinda</title>
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="img/rutaguinda_logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body class="theme-light">
+
+  <!-- ============================================================
+       LOGIN
+       ============================================================ -->
+  <div id="s-login">
+    <div class="login-card">
+      <div class="login-logo" style="background:transparent; padding:0; box-shadow:none;">
+        <img src="img/rutaguinda_logo.png" alt="RutaGuinda Logo" style="width:100%; height:100%; object-fit:contain; border-radius:16px;">
+      </div>
+      <div class="login-t">RutaGuinda</div>
+      <div class="login-s">Control de Campo</div>
+      <div id="login-err" class="err-msg hidden" role="alert"></div>
+      <div class="campo">
+        <label for="iu">Usuario</label>
+        <input type="text" id="iu" placeholder="Ingrese su usuario" autocomplete="username" autocapitalize="none">
+      </div>
+      <div class="campo">
+        <label for="ip">Contraseña</label>
+        <input type="password" id="ip" placeholder="Ingrese su contraseña" autocomplete="current-password">
+      </div>
+      <button class="btn-login" id="btn-login">Entrar al Sistema</button>
+      <div class="login-v">v4.2 · Campaña Luis Emilio</div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       APP SHELL
+       ============================================================ -->
+  <div id="s-app" class="hidden">
+
+    <!-- Header -->
+    <header class="hdr">
+      <div class="hdr-left">
+        <div class="hdr-logo-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </div>
+        <div>
+          <div class="hdr-t">RutaGuinda</div>
+          <div class="hdr-u" id="hdr-u"></div>
+        </div>
+      </div>
+      <div class="hdr-right">
+        <button id="btn-theme" class="btn-theme-toggle" aria-label="Cambiar tema">
+          <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="moon-icon hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+        <div class="hdr-status" id="hdr-status">● Online</div>
+        <button class="btn-sal-hdr" aria-label="Cerrar sesión">Salir</button>
+      </div>
+    </header>
+
+    <!-- Nav Móvil Entrevistadora -->
+    <nav id="nav-e" class="nav-mob hidden">
+      <button class="nt active" data-nav-section="e-ini" data-nav-id="nav-e">🏠 Inicio</button>
+      <button class="nt" data-nav-section="e-nv" data-nav-id="nav-e">➕ Nueva</button>
+      <button class="nt" data-nav-section="e-his" data-nav-id="nav-e">📋 Registros</button>
+    </nav>
+
+    <!-- Nav Móvil Admin -->
+    <nav id="nav-a" class="nav-mob hidden">
+      <button class="nt active" data-nav-section="a-db" data-nav-id="nav-a">📊 Inicio</button>
+      <button class="nt" data-nav-section="a-ent" data-nav-id="nav-a">📋 Entrevistas</button>
+      <button class="nt" data-nav-section="a-usr" data-nav-id="nav-a">👥 Usuarios</button>
+      <button class="nt" data-nav-section="a-preg" data-nav-id="nav-a">❓ Preguntas</button>
+      <button class="nt" data-nav-section="a-map" data-nav-id="nav-a">🗺 Mapa</button>
+      <button class="nt" data-nav-section="a-rep" data-nav-id="nav-a">📤 Reportes</button>
+      <button class="nt" data-nav-section="a-est" data-nav-id="nav-a">📈 Estadísticas</button>
+    </nav>
+
+    <div class="app-shell">
+
+      <!-- Sidebar Desktop Admin -->
+      <aside class="sidebar hidden" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-t">RutaGuinda</div>
+          <div class="sidebar-logo-s" id="sb-usuario"></div>
+        </div>
+        <button class="sb-item active" data-sidebar-section="a-db"><span class="ico">📊</span>Dashboard</button>
+        <button class="sb-item" data-sidebar-section="a-ent"><span class="ico">📋</span>Entrevistas</button>
+        <button class="sb-item" data-sidebar-section="a-usr"><span class="ico">👥</span>Usuarios</button>
+        <button class="sb-item" data-sidebar-section="a-preg"><span class="ico">❓</span>Preguntas</button>
+        <div class="sb-sep" role="separator"></div>
+        <button class="sb-item" data-sidebar-section="a-map"><span class="ico">🗺</span>Mapa GPS</button>
+        <button class="sb-item" data-sidebar-section="a-rep"><span class="ico">📤</span>Reportes</button>
+        <button class="sb-item" data-sidebar-section="a-est"><span class="ico">📈</span>Estadísticas</button>
+        <div class="sb-salir">
+          <button class="btn-sal-sb" aria-label="Cerrar sesión">← Cerrar sesión</button>
+        </div>
+      </aside>
+
+      <!-- Área principal -->
+      <main class="main-area" id="main-area">
+
+        <!-- ENTREVISTADORA: INICIO -->
+        <section id="e-ini" class="cont">
+          <div class="bv-card">
+            <div class="bv-nombre" id="bv-n">Hola 👋</div>
+            <div class="bv-sub">¡Listo para capturar entrevistas en campo!</div>
+          </div>
+
+          <!-- Alerta de sincronización local -->
+          <div class="local-alert-card" id="local-alert" style="display:none">
+            <div class="local-alert-ico">⏳</div>
+            <div class="local-alert-info">
+              <div class="local-alert-t">Registros pendientes de envío</div>
+              <div class="local-alert-s" id="local-alert-txt"></div>
+            </div>
+            <button class="btn-sync-now" id="btn-sync-now">Sincronizar</button>
+          </div>
+
+          <div class="cnt-row">
+            <div class="cnt-c">
+              <div class="cnt-n" id="e-hoy">-</div>
+              <div class="cnt-l">hoy</div>
+            </div>
+            <div class="cnt-c">
+              <div class="cnt-n" id="e-sem">-</div>
+              <div class="cnt-l">semana</div>
+            </div>
+            <div class="cnt-c">
+              <div class="cnt-n" id="e-tot">-</div>
+              <div class="cnt-l">total</div>
+            </div>
+          </div>
+
+          <div class="meta-card" id="meta-c" style="display:none">
+            <div class="meta-row">
+              <span>Mi meta diaria</span>
+              <span class="meta-val" id="meta-txt"></span>
+            </div>
+            <div class="barra-f">
+              <div class="barra-r" id="meta-bar" style="width:0%"></div>
+            </div>
+          </div>
+
+          <button class="btn-ppal" id="btn-nueva-ent">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+            Nueva entrevista
+          </button>
+          <button class="btn-sec" id="btn-ver-reg">📋 Ver mis registros</button>
+        </section>
+
+        <!-- ENTREVISTADORA: NUEVA ENTREVISTA -->
+        <section id="e-nv" class="cont hidden">
+          <div class="form-hdr">
+            <div class="form-hdr-t">Nueva entrevista</div>
+            <div class="form-hdr-s" id="fh-f"></div>
+          </div>
+
+          <!-- SECCIÓN 1: DATOS DEL CIUDADANO -->
+          <div class="preg-card">
+            <div class="preg-lbl">
+              <div class="preg-num">1</div>
+              <div>Datos del ciudadano</div>
+            </div>
+            <div class="campo" style="margin-bottom:12px">
+              <label for="fn-nombres">Nombre(s) <span class="req-mark">*</span></label>
+              <input type="text" id="fn-nombres" placeholder="Nombre(s)">
+            </div>
+            <div style="display:flex;gap:12px;margin-bottom:12px">
+              <div class="campo" style="flex:1;margin-bottom:0">
+                <label for="fn-paterno">Apellido Paterno <span class="req-mark">*</span></label>
+                <input type="text" id="fn-paterno" placeholder="Paterno">
+              </div>
+              <div class="campo" style="flex:1;margin-bottom:0">
+                <label for="fn-materno">Apellido Materno</label>
+                <input type="text" id="fn-materno" placeholder="Materno">
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;margin-bottom:0">
+              <div class="campo" style="flex:1;margin-bottom:0">
+                <label for="fn-edad">Edad <span class="req-mark">*</span></label>
+                <input type="number" id="fn-edad" placeholder="Años" min="18" max="110" inputmode="numeric">
+              </div>
+              <div class="campo" style="flex:2;margin-bottom:0">
+                <label for="fn-tel">Teléfono</label>
+                <input type="tel" id="fn-tel" placeholder="10 dígitos" maxlength="15">
+              </div>
+            </div>
+          </div>
+
+          <!-- SECCIÓN 2: UBICACIÓN -->
+          <div class="preg-card">
+            <div class="preg-lbl">
+              <div class="preg-num">2</div>
+              <div>Ubicación</div>
+            </div>
+            <div class="campo" style="margin-bottom:12px">
+              <label for="fn-calle">Calle y número <span class="req-mark">*</span></label>
+              <input type="text" id="fn-calle" placeholder="Calle, número, colonia">
+            </div>
+            <div class="campo">
+              <label for="fn-seccion">Sección Electoral <span class="req-mark">*</span></label>
+              <input type="number" id="fn-seccion" placeholder="Sección" inputmode="numeric">
+            </div>
+          </div>
+
+          <!-- SECCIÓN 3: SIMPATÍA POLÍTICA -->
+          <div class="preg-card">
+            <div class="preg-lbl">
+              <div class="preg-num">3</div>
+              <div>¿Simpatiza con algún partido? <span class="req-mark">*</span></div>
+            </div>
+            <div class="opts opt-sino" style="margin-bottom:16px">
+              <button type="button" class="opt" id="opt-simpatiza-si" onclick="selOptSimpatiza('si')">✓ Sí</button>
+              <button type="button" class="opt" id="opt-simpatiza-no" onclick="selOptSimpatiza('no')">✗ No</button>
+            </div>
+            <div id="div-partido-cual" class="hidden">
+              <div class="campo" style="margin-bottom:0">
+                <label for="fn-partido-cual">¿Cuál partido? <span class="req-mark">*</span></label>
+                <select id="fn-partido-cual" class="inp">
+                  <option value="">-- Seleccione --</option>
+                  <option value="Morena">Morena</option>
+                  <option value="PAN">PAN</option>
+                  <option value="PRI">PRI</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECCIÓN 4: CANDIDATO con foto -->
+          <div class="preg-card">
+            <div class="preg-lbl">
+              <div class="preg-num">4</div>
+              <div>¿Conoce a Luis Emilio?</div>
+            </div>
+            <div class="candidato-foto-wrap">
+              <img src="img/candidato.jpg" alt="Luis Emilio" class="candidato-foto" onerror="this.style.display='none'">
+              <div class="candidato-nombre">Luis Emilio</div>
+            </div>
+            <div class="opts opt-sino">
+              <button type="button" class="opt" id="opt-cand-si" onclick="selOptCandidato('si')">✓ Sí lo conoce</button>
+              <button type="button" class="opt" id="opt-cand-no" onclick="selOptCandidato('no')">✗ No lo conoce</button>
+            </div>
+          </div>
+
+          <!-- SECCIÓN 5: OBSERVACIONES -->
+          <div class="preg-card">
+            <div class="preg-lbl">
+              <div class="preg-num">5</div>
+              <div>Observaciones</div>
+            </div>
+            <textarea class="inp grande" id="fn-observaciones" placeholder="Detalles adicionales de la entrevista..."></textarea>
+          </div>
+
+          <!-- SECCIÓN 6: EVIDENCIA FOTOGRÁFICA -->
+          <div class="preg-card">
+            <div class="preg-lbl">
+              <div class="preg-num">6</div>
+              <div>Evidencia Fotográfica <span style="font-size:13px;color:var(--text-muted);font-weight:400">(opcionales)</span></div>
+            </div>
+
+            <div class="sec-tit">Foto de la vivienda</div>
+            <div class="foto-zona">
+              <input type="file" accept="image/*" capture="environment" class="foto-input" id="fi-casa">
+              <div class="foto-zona-inner">
+                <div class="foto-zona-ico">🏠</div>
+                <div class="foto-zona-t">Tomar foto o elegir archivo</div>
+                <div class="foto-zona-s">Opcional</div>
+              </div>
+            </div>
+            <div class="fotos-prev" id="prev-casa"></div>
+
+            <div class="sep" role="separator"></div>
+            
+            <div class="sec-tit">INE / Credencial (Frente)</div>
+            <div class="foto-zona">
+              <input type="file" accept="image/*" capture="environment" class="foto-input" id="fi-idf">
+              <div class="foto-zona-inner">
+                <div class="foto-zona-ico">🪪</div>
+                <div class="foto-zona-t">Tomar foto o elegir archivo</div>
+                <div class="foto-zona-s">Opcional</div>
+              </div>
+            </div>
+            <div class="fotos-prev" id="prev-idf"></div>
+
+            <div class="sep" role="separator"></div>
+
+            <div class="sec-tit">INE / Credencial (Reverso)</div>
+            <div class="foto-zona">
+              <input type="file" accept="image/*" capture="environment" class="foto-input" id="fi-idr">
+              <div class="foto-zona-inner">
+                <div class="foto-zona-ico">🔄</div>
+                <div class="foto-zona-t">Tomar foto o elegir archivo</div>
+                <div class="foto-zona-s">Opcional</div>
+              </div>
+            </div>
+            <div class="fotos-prev" id="prev-idr"></div>
+          </div>
+
+          <!-- CONTENEDOR PARA PREGUNTAS DINÁMICAS (EXTRAS) -->
+          <div id="preguntas-dinamicas-container"></div>
+
+          <button class="btn-guardar" id="btn-guardar">✓ Guardar entrevista</button>
+          <button class="btn-can" id="btn-can-nv" type="button">Cancelar</button>
+          <div style="height:24px"></div>
+        </section>
+
+        <!-- ENTREVISTADORA: HISTORIAL -->
+        <section id="e-his" class="cont hidden">
+          <h1 class="page-title">Mis entrevistas</h1>
+          <p class="page-sub">Historial de capturas realizadas en campo</p>
+          <div id="lista-his"><div class="cargando"><span class="loader"></span>Cargando...</div></div>
+        </section>
+
+        <!-- ADMIN: DASHBOARD -->
+        <section id="a-db" class="cont hidden">
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-sub" id="a-fecha-hoy"></p>
+          <div class="stats-grid">
+            <div class="stat-c">
+              <div class="stat-n" id="a-tot">-</div>
+              <div class="stat-l">Total entrevistas</div>
+            </div>
+            <div class="stat-c ok">
+              <div class="stat-n" id="a-hoy">-</div>
+              <div class="stat-l">Entrevistas hoy</div>
+            </div>
+            <div class="stat-c az">
+              <div class="stat-n" id="a-nusr">-</div>
+              <div class="stat-l">Entrevistadores Activos</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:32px">
+            <!-- Reconocimiento de Candidato -->
+            <div class="stat-c" style="flex:1;min-width:240px;display:flex;flex-direction:column;justify-content:center">
+              <div style="font-size:14px;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">Campaña Luis Emilio</div>
+              <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:800">
+                <span style="color:var(--ok)">Conoce: <span id="a-cand-si">-</span></span>
+                <span style="color:var(--err)">No conoce: <span id="a-cand-no">-</span></span>
+              </div>
+            </div>
+            <!-- Top Secciones -->
+            <div class="stat-c" style="flex:2;min-width:320px">
+              <div style="font-size:14px;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px">Top Secciones Electorales</div>
+              <div id="a-top-secciones" style="display:flex;flex-direction:column;gap:8px"></div>
+            </div>
+          </div>
+
+          <h2 class="section-subtitle">📊 Ranking de productividad</h2>
+          <div class="ranking-grid" id="ranking"></div>
+
+          <h2 class="section-subtitle" style="margin-top: 32px">📈 Gráficos de Desempeño</h2>
+          <div class="dashboard-charts">
+            <div class="chart-card">
+              <h4>Productividad Diaria (Últimos 7 días)</h4>
+              <div id="chart-semana-svg" class="chart-container"></div>
+            </div>
+            <div class="chart-card">
+              <h4>Distribución por Entrevistador</h4>
+              <div id="chart-usr-svg" class="chart-container"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ADMIN: ENTREVISTAS -->
+        <section id="a-ent" class="cont hidden">
+          <h1 class="page-title">Entrevistas</h1>
+          <p class="page-sub">Registros de todas las entrevistas capturadas</p>
+          <div class="table-wrap">
+            <div class="table-head">
+              <div class="table-head-t">Listado General</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                <input type="text" id="fil-busqueda" class="table-search" placeholder="🔍 Buscar..." aria-label="Buscar respuestas">
+                <select id="fil-usr" class="table-search" aria-label="Filtrar por entrevistadora">
+                  <option value="">Todos los entrevistadores</option>
+                </select>
+                <input type="date" id="fil-fecha" class="table-search" aria-label="Filtrar por fecha">
+                <button class="btn-sm rojo" id="btn-limpiar-filtros" type="button">✕ Limpiar</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="t-tabla">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Entrevistador</th>
+                    <th>Fecha y Hora</th>
+                    <th>GPS</th>
+                    <th>Fotos</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-ents"></tbody>
+              </table>
+            </div>
+            <div class="table-foot">
+              <span id="table-info">Mostrando registros 0-0 de 0</span>
+              <div class="pagination">
+                <button id="btn-pag-prev" class="btn-pag" disabled type="button">Anterior</button>
+                <span id="pag-current">1</span>
+                <button id="btn-pag-next" class="btn-pag" disabled type="button">Siguiente</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ADMIN: USUARIOS -->
+        <section id="a-usr" class="cont hidden">
+          <div class="flex-between mb16">
+            <div>
+              <h1 class="page-title">Usuarios</h1>
+              <p class="page-sub" style="margin:0">Gestión de personal de campo y administradores</p>
+            </div>
+            <button class="btn-sm ppal" id="btn-add-usr">+ Agregar usuario</button>
+          </div>
+          <div id="lista-usr"><div class="cargando"><span class="loader"></span>Cargando...</div></div>
+        </section>
+
+        <!-- ADMIN: PREGUNTAS -->
+        <section id="a-preg" class="cont hidden">
+          <div class="flex-between mb16">
+            <div>
+              <h1 class="page-title">Preguntas Adicionales</h1>
+              <p class="page-sub" style="margin:0">Las 10 preguntas base ya están fijas. Aquí puede agregar extras.</p>
+            </div>
+            <button class="btn-sm ppal" id="btn-add-preg">+ Agregar pregunta</button>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid rgba(255,193,7,0.3);padding:12px 16px;border-radius:12px;margin-bottom:16px;color:var(--text-main);font-size:14px;border-left:4px solid #ffc107">
+            <strong>Nota:</strong> Estas preguntas aparecerán dinámicamente al final del formulario en campo.
+          </div>
+          <div id="lista-preg"><div class="cargando"><span class="loader"></span>Cargando...</div></div>
+        </section>
+
+        <!-- ADMIN: MAPA GPS -->
+        <section id="a-map" class="cont hidden">
+          <h1 class="page-title">Mapa de Cobertura Territorial</h1>
+          <p class="page-sub">Rutas GPS y puntos de captura en tiempo real</p>
+
+          <div class="mapa-filtros-top">
+            <select id="fil-map-dia" aria-label="Periodo del mapa">
+              <option value="hoy">Rutas de hoy</option>
+              <option value="semana">Esta semana</option>
+              <option value="todo">Todo el historial</option>
+            </select>
+            <select id="fil-map-ses" aria-label="Sesión">
+              <option value="">Todas las sesiones</option>
+            </select>
+            <select id="fil-map-modo" aria-label="Modo de visualización">
+              <option value="ambos">Ver Rutas y Entrevistas</option>
+              <option value="rutas">Solo Rutas GPS</option>
+              <option value="entrevistas">Solo Puntos de Encuesta</option>
+            </select>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text-main)">
+              <input type="checkbox" id="fil-map-fotos" style="width:16px;height:16px">
+              Ver solo con foto
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text-main)">
+              <input type="checkbox" id="chk-heatmap" style="width:16px;height:16px">
+              🔥 Ver Heatmap
+            </label>
+            <div style="display:flex;gap:6px;margin-left:auto">
+              <input type="text" id="fil-map-buscar-txt" placeholder="Buscar dirección...">
+              <button class="btn-sm ppal" id="btn-map-buscar" type="button">Buscar</button>
+            </div>
+            <button class="btn-sm" style="background:#25D366;color:#fff;border:none;margin-left:10px" id="btn-exportar-mapa" type="button" onclick="exportarMapa()">
+              📸 Compartir a WhatsApp
+            </button>
+          </div>
+
+          <div class="mapa-stats">
+            <div class="mapa-stat">📋 Entrevistas: <span id="map-cnt-ents">0</span></div>
+            <div class="mapa-stat">📍 Puntos GPS: <span id="map-cnt-pts">0</span></div>
+          </div>
+
+          <div class="map-workspace">
+            <div class="map-sidebar">
+              <div class="map-sidebar-t">Personal en campo</div>
+              <button class="map-user-item active" id="btn-map-all-usrs" type="button">
+                <div class="map-user-color-dot" style="background:#444"></div>
+                <span>Ver todo el equipo</span>
+              </button>
+              <div class="sep" style="margin:6px 0" role="separator"></div>
+              <div class="map-user-list" id="map-lista-senoras"></div>
+            </div>
+            <div id="mapa-leaflet" aria-label="Mapa de cobertura"></div>
+          </div>
+
+          <div class="mapa-leyenda">
+            <span>📋 Punto de encuesta</span>
+            <span>
+              <svg width="20" height="10" aria-hidden="true"><line x1="0" y1="5" x2="20" y2="5" stroke="#7b1c3e" stroke-width="3"/></svg>
+              Trayectoria
+            </span>
+            <span>🔵 Punto GPS</span>
+          </div>
+        </section>
+
+        <!-- ADMIN: REPORTES -->
+        <section id="a-rep" class="cont hidden">
+          <h1 class="page-title">Reportes</h1>
+          <p class="page-sub">Estadísticas y exportación de datos en formatos</p>
+          <div class="rep-grid">
+            <div class="rep-card active" data-reporte="entrevistadora" tabindex="0" role="button">
+              <div class="rep-ico">👥</div>
+              <div class="rep-t">Por entrevistadora</div>
+              <div class="rep-d">Productividad por persona</div>
+            </div>
+            <div class="rep-card" data-reporte="dia" tabindex="0" role="button">
+              <div class="rep-ico">📅</div>
+              <div class="rep-t">Por día</div>
+              <div class="rep-d">Productividad diaria</div>
+            </div>
+            <div class="rep-card" data-reporte="respuestas" tabindex="0" role="button">
+              <div class="rep-ico">📊</div>
+              <div class="rep-t">Respuestas</div>
+              <div class="rep-d">Análisis de preguntas</div>
+            </div>
+            <div class="rep-card" data-reporte="csv" tabindex="0" role="button">
+              <div class="rep-ico">⬇️ CSV</div>
+              <div class="rep-t">Exportar CSV</div>
+              <div class="rep-d">Descargar todos los datos</div>
+            </div>
+            <!-- Tarjeta Excel agregada -->
+            <div class="rep-card" onclick="exportarExcel()" tabindex="0" role="button">
+              <div class="rep-ico">📈 XLS</div>
+              <div class="rep-t">Exportar Excel</div>
+              <div class="rep-d">Formato de hoja de cálculo</div>
+            </div>
+          </div>
+          <div id="rep-detalle-area"></div>
+        </section>
+
+        <!-- ADMIN: ESTADÍSTICAS -->
+        <section id="a-est" class="cont hidden">
+          <h1 class="page-title">Estadísticas de Campo</h1>
+          <p class="page-sub">Análisis visual de respuestas clave de las entrevistas</p>
+
+          <div class="est-grid">
+
+            <!-- GRÁFICA 1: ¿Conoce a Luis Emilio? -->
+            <div class="est-card">
+              <div class="est-card-header">
+                <div class="est-card-titulo">👤 ¿Conoce a Luis Emilio?</div>
+                <div class="est-card-sub" id="est-emilio-total">Cargando...</div>
+              </div>
+              <div class="est-chart-wrap">
+                <canvas id="chart-emilio" aria-label="Gráfica conoce a Luis Emilio"></canvas>
+              </div>
+              <div class="est-legend" id="est-emilio-legend"></div>
+              <div class="est-acciones">
+                <button class="btn-sm ppal" onclick="imprimirListaEmilio('si')">🖨 Imprimir los que SÍ conocen</button>
+                <button class="btn-sm bord" onclick="imprimirListaEmilio('no')">🖨 Imprimir los que NO conocen</button>
+              </div>
+            </div>
+
+            <!-- GRÁFICA 2: Simpatía con partidos -->
+            <div class="est-card">
+              <div class="est-card-header">
+                <div class="est-card-titulo">🗳 Partidos con que Simpatizan</div>
+                <div class="est-card-sub" id="est-partido-total">Cargando...</div>
+              </div>
+              <div class="est-chart-wrap">
+                <canvas id="chart-partidos" aria-label="Gráfica simpatía por partidos"></canvas>
+              </div>
+              <div class="est-legend" id="est-partido-legend"></div>
+              <div class="est-acciones">
+                <button class="btn-sm ppal" onclick="imprimirListaPartido('Morena')">🖨 Lista Morena</button>
+                <button class="btn-sm bord" onclick="imprimirListaPartido('PAN')">🖨 Lista PAN</button>
+                <button class="btn-sm bord" onclick="imprimirListaPartido('PRI')">🖨 Lista PRI</button>
+                <button class="btn-sm bord" onclick="imprimirListaPartido('Otro')">🖨 Lista Otro</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Área de impresión oculta -->
+          <div id="area-impresion" style="display:none"></div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODALES
+       ============================================================ -->
+
+  <!-- Modal: Usuario -->
+  <div id="m-usr" class="modal-fondo hidden" role="dialog" aria-modal="true" aria-labelledby="m-usr-t">
+    <div class="modal-caja">
+      <div class="modal-t" id="m-usr-t">👤 Agregar usuario</div>
+      <div class="modal-campo">
+        <label for="mu-n">Nombre completo</label>
+        <input type="text" id="mu-n" placeholder="Nombre completo">
+      </div>
+      <div class="modal-campo">
+        <label for="mu-u">Usuario (login)</label>
+        <input type="text" id="mu-u" placeholder="login sin espacios" autocapitalize="none">
+      </div>
+      <div class="modal-campo">
+        <label for="mu-p">Contraseña</label>
+        <input type="password" id="mu-p" placeholder="contraseña segura">
+      </div>
+      <div class="modal-campo">
+        <label for="mu-r">Rol</label>
+        <select id="mu-r">
+          <option value="entrevistador">Entrevistadora</option>
+          <option value="admin">Administrador</option>
+        </select>
+      </div>
+      <div class="modal-campo">
+        <label for="mu-m">Meta diaria (entrevistas)</label>
+        <input type="number" id="mu-m" min="0" placeholder="Ej: 10">
+      </div>
+      <label class="modal-check">
+        <input type="checkbox" id="mu-activo" checked> Usuario activo
+      </label>
+      <input type="hidden" id="mu-id">
+      <button class="btn-guardar" id="btn-grd-usr">Guardar usuario</button>
+      <button class="btn-can mt8" data-modal-close="m-usr" type="button">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Modal: Pregunta -->
+  <div id="m-preg" class="modal-fondo hidden" role="dialog" aria-modal="true" aria-labelledby="m-preg-t">
+    <div class="modal-caja">
+      <div class="modal-t" id="m-preg-t">❓ Nueva pregunta</div>
+      <div class="modal-campo">
+        <label for="mp-t">Texto de la pregunta</label>
+        <input type="text" id="mp-t" placeholder="¿Cuántas personas viven en la vivienda?">
+      </div>
+      <div class="modal-campo">
+        <label for="mp-tipo">Tipo de respuesta</label>
+        <select id="mp-tipo">
+          <option value="texto">Texto libre</option>
+          <option value="numero">Número</option>
+          <option value="opciones">Opción múltiple</option>
+          <option value="si_no">Sí / No</option>
+        </select>
+      </div>
+      <div id="mp-opts-w" class="hidden">
+        <div class="modal-campo">
+          <label for="mp-opts">Opciones (una por línea)</label>
+          <textarea id="mp-opts" placeholder="Opción A&#10;Opción B&#10;Opción C"></textarea>
+        </div>
+      </div>
+      <label class="modal-check">
+        <input type="checkbox" id="mp-req"> Pregunta obligatoria
+      </label>
+      <label class="modal-check">
+        <input type="checkbox" id="mp-activa" checked> Pregunta activa
+      </label>
+      <input type="hidden" id="mp-id">
+      <button class="btn-guardar" id="btn-grd-preg">Guardar pregunta</button>
+      <button class="btn-can mt8" data-modal-close="m-preg" type="button">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Modal: Detalle de Entrevista -->
+  <div id="m-det" class="modal-fondo hidden" role="dialog" aria-modal="true" aria-label="Detalle de entrevista">
+    <div class="modal-caja">
+      <div class="modal-t">📋 Detalle de entrevista</div>
+      <div id="m-det-c"></div>
+      <button class="btn-can mt8" data-modal-close="m-det" type="button">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- Modal: Confirmar eliminación -->
+  <div id="m-del" class="modal-fondo hidden" role="dialog" aria-modal="true" aria-label="Confirmar eliminación">
+    <div class="modal-caja">
+      <div class="modal-t">🗑 Eliminar entrevista</div>
+      <p style="font-size:15px;color:var(--text-main);margin-bottom:20px">¿Está seguro de que desea eliminar esta entrevista? Esta acción no se puede deshacer.</p>
+      <button class="btn-guardar" style="background:var(--err)" id="btn-conf-del">Sí, eliminar</button>
+      <button class="btn-can mt8" data-modal-close="m-del" type="button">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Toast y badge -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="sync-badge" class="sync-badge" role="status" aria-live="polite"></div>
+
+  <!-- Carga secuencial de scripts modulares -->
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/gps.js"></script>
+  <script src="js/entrevistas.js"></script>
+  <script src="js/mapa.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/reportes.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/estadisticas.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
