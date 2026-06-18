@@ -1,4 +1,4 @@
-const CACHE = 'territoria-gis-v4.2';
+const CACHE = 'territoria-gis-v4.3';
 const ASSETS = [
   './',
   './index.html',
