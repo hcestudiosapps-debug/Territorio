@@ -80,6 +80,7 @@ async function syncQ() {
             exitos++;
           } else {
             console.error('Fallo al subir entrevista remota:', error.message);
+            toast('Sync Error: ' + error.message, 6000);
             errores++;
           }
         } catch (e) {

@@ -414,13 +414,13 @@ async function guardarEnt() {
       
       if (error) {
         await encolarEntrevistaLocal(ent);
-        toast('Guardada localmente (Fallo al subir)');
+        toast('Error Supabase: ' + (error.message || 'Desconocido'), 5000);
       } else {
         toast('✓ Entrevista enviada correctamente');
       }
     } catch (e) {
       await encolarEntrevistaLocal(ent);
-      toast('Guardada localmente (Red inestable)');
+      toast('Excepción: ' + (e.message || 'Red inestable'), 5000);
     }
   } else {
     await encolarEntrevistaLocal(ent);
