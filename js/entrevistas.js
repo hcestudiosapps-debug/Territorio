@@ -366,7 +366,9 @@ async function guardarEnt() {
 
       // 2. Revisar en Supabase si hay conexión
       if (navigator.onLine) {
-        const { data, error } = await sb.from('entrevistas').select('id').eq('telefono', telefono).limit(1);
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('TIMEOUT')), 6000));
+        const reqPromise = sb.from('entrevistas').select('id').eq('telefono', telefono).limit(1);
+        const { data, error } = await Promise.race([reqPromise, timeoutPromise]);
         if (data && data.length > 0) {
           toast('Error: Este teléfono ya ha sido encuestado en el sistema.', 5000);
           btn.disabled = false;
@@ -406,7 +408,10 @@ async function guardarEnt() {
   // Enviar a Supabase o encolar localmente en IndexedDB
   if (navigator.onLine) {
     try {
-      const { error } = await sb.from('entrevistas').insert(ent);
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('TIMEOUT')), 8000));
+      const reqPromise = sb.from('entrevistas').insert(ent);
+      const { error } = await Promise.race([reqPromise, timeoutPromise]);
+      
       if (error) {
         await encolarEntrevistaLocal(ent);
         toast('Guardada localmente (Fallo al subir)');
@@ -415,7 +420,7 @@ async function guardarEnt() {
       }
     } catch (e) {
       await encolarEntrevistaLocal(ent);
-      toast('Guardada localmente (Error de red)');
+      toast('Guardada localmente (Red inestable)');
     }
   } else {
     await encolarEntrevistaLocal(ent);

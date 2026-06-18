@@ -131,3 +131,15 @@ async function syncQ() {
     console.error('Error durante la sincronización:', err);
   }
 }
+
+// ================================================================
+// AUTO-SYNC EN SEGUNDO PLANO
+// ================================================================
+setInterval(async () => {
+  if (!navigator.onLine || !yo) return;
+  // Solo sincronizar automáticamente si no estamos ya sincronizando y hay pendientes
+  const alertCard = $('local-alert');
+  if (alertCard && alertCard.style.display !== 'none') {
+    syncQ();
+  }
+}, 30000);
