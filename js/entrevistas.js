@@ -85,24 +85,27 @@ function abrirForm() {
   });
 
   // Limpiar campos estáticos
-  $('fn-nombres').value = '';
-  $('fn-paterno').value = '';
-  $('fn-materno').value = '';
-  $('fn-edad').value = '';
-  $('fn-tel').value = '';
-  $('fn-calle').value = '';
-  $('fn-seccion').value = '';
-  $('fn-partido-cual').value = '';
-  $('fn-observaciones').value = '';
-  
-  // Quitar selección visual de botones de simpatía
-  $('opt-simpatiza-si')?.classList.remove('selected');
-  $('opt-simpatiza-no')?.classList.remove('selected');
-  $('opt-cand-si')?.classList.remove('selected');
-  $('opt-cand-no')?.classList.remove('selected');
-  
-  // Ocultar campo dinámico de partido político por defecto
-  $('div-partido-cual').classList.add('hidden');
+  if ($('fn-total-18')) $('fn-total-18').value = '';
+  if ($('fn-nombres')) $('fn-nombres').value = '';
+  if ($('fn-paterno')) $('fn-paterno').value = '';
+  if ($('fn-materno')) $('fn-materno').value = '';
+  if ($('fn-edad')) $('fn-edad').value = '';
+  if ($('fn-tel')) $('fn-tel').value = '';
+  if ($('fn-colonia')) $('fn-colonia').value = '';
+  if ($('fn-calle')) $('fn-calle').value = '';
+  if ($('fn-seccion')) $('fn-seccion').value = '';
+  if ($('fn-p1')) $('fn-p1').value = '';
+  if ($('fn-p2')) $('fn-p2').value = '';
+  if ($('fn-p3')) $('fn-p3').value = '';
+  if ($('fn-p4')) $('fn-p4').value = '';
+  if ($('fn-p5')) $('fn-p5').value = '';
+  if ($('fn-p6')) $('fn-p6').value = '';
+  if ($('fn-p7')) $('fn-p7').value = '';
+  if ($('fn-p8')) $('fn-p8').value = '';
+  if ($('fn-p9')) $('fn-p9').value = '';
+  if ($('fn-clasificacion')) $('fn-clasificacion').value = '';
+  if ($('fn-prioridad')) $('fn-prioridad').value = '';
+  if ($('fn-observaciones')) $('fn-observaciones').value = '';
 
   // Renderizar formulario de preguntas dinámicas y candidato
   renderForm();
@@ -286,14 +289,27 @@ async function guardarEnt() {
   btn.textContent = 'Guardando...';
 
   // Validaciones manuales de campos obligatorios
+  const totalMayores18 = parseInt($('fn-total-18')?.value) || null;
   const nombres = $('fn-nombres').value.trim();
   const paterno = $('fn-paterno').value.trim();
   const materno = $('fn-materno').value.trim();
   const edad = parseInt($('fn-edad')?.value) || null;
   const telefono = $('fn-tel').value.trim();
+  const colonia = $('fn-colonia').value.trim();
   const calle = $('fn-calle').value.trim();
   const seccion = $('fn-seccion').value.trim();
-  const partidoCual = $('fn-partido-cual').value.trim();
+
+  const p1 = $('fn-p1').value;
+  const p2 = $('fn-p2').value;
+  const p3 = $('fn-p3').value;
+  const p4 = $('fn-p4').value;
+  const p5 = $('fn-p5').value;
+  const p6 = $('fn-p6').value;
+  const p7 = $('fn-p7').value;
+  const p8 = $('fn-p8').value;
+  const p9 = $('fn-p9').value;
+  const clasificacion = $('fn-clasificacion').value;
+  const prioridad = $('fn-prioridad').value;
   const observaciones = $('fn-observaciones').value.trim();
 
   let ok = true;
@@ -307,6 +323,11 @@ async function guardarEnt() {
     }
   };
 
+  if (!totalMayores18 || totalMayores18 < 1) {
+    $('fn-total-18')?.classList.add('preg-err');
+    setTimeout(() => $('fn-total-18')?.classList.remove('preg-err'), 2000);
+    ok = false;
+  }
   checkReq(nombres, 'fn-nombres');
   checkReq(paterno, 'fn-paterno');
   if (!edad || edad < 18 || edad > 110) {
@@ -314,13 +335,21 @@ async function guardarEnt() {
     setTimeout(() => $('fn-edad')?.classList.remove('preg-err'), 2000);
     ok = false;
   }
+  checkReq(colonia, 'fn-colonia');
   checkReq(calle, 'fn-calle');
   checkReq(seccion, 'fn-seccion');
 
-  // Validar si simpatiza y especificó partido
-  if (sels['simpatiza'] === 'si') {
-    checkReq(partidoCual, 'fn-partido-cual');
-  }
+  checkReq(p1, 'fn-p1');
+  checkReq(p2, 'fn-p2');
+  checkReq(p3, 'fn-p3');
+  checkReq(p4, 'fn-p4');
+  checkReq(p5, 'fn-p5');
+  checkReq(p6, 'fn-p6');
+  checkReq(p7, 'fn-p7');
+  checkReq(p8, 'fn-p8');
+  checkReq(p9, 'fn-p9');
+  checkReq(clasificacion, 'fn-clasificacion');
+  checkReq(prioridad, 'fn-prioridad');
 
   // Recolectar respuestas a preguntas dinámicas
   const respuestas = {};
@@ -386,16 +415,27 @@ async function guardarEnt() {
   // Estructurar objeto final
   const ent = {
     usuario_id: yo.id,
+    total_mayores_18: totalMayores18,
     nombres: nombres,
     apellido_paterno: paterno,
     apellido_materno: materno || null,
     edad: edad,
     telefono: telefono || null,
+    colonia: colonia,
     calle: calle,
     seccion: seccion,
-    partido_cual: sels['simpatiza'] === 'si' ? partidoCual : null,
-    conoce_candidato: sels['candidato'] || null,
-    observaciones: observaciones || null,
+    problema_principal: p1,
+    percepcion_atencion: p2,
+    conoce_diputada: p3,
+    evaluacion_diputada: p4,
+    cumplimiento_diputada: p5,
+    simpatia_politica: p6,
+    conocimiento_luis_emilio: p7,
+    canal_posicionamiento: p8,
+    voto_confianza: p9,
+    clasificacion_interna: clasificacion,
+    prioridad_seguimiento: prioridad,
+    observaciones_internas: observaciones || null,
     foto_casa: fotosData['casa'] || null,
     foto_ine_frente: fotosData['idf'] || null,
     foto_ine_reverso: fotosData['idr'] || null,
@@ -530,14 +570,32 @@ function verDetEnt(idx) {
   const fecha = new Date(e.fecha_entrevista);
   
   let html = `
+    <div class="det-row"><span class="det-lbl">Folio</span><span class="det-val">${e.folio_vivienda || 'Pendiente de sincronizar'}</span></div>
+    <div class="det-row"><span class="det-lbl">Nº Persona</span><span class="det-val">${e.persona_entrevistada_num || 'Pendiente de sincronizar'}</span></div>
     <div class="det-row"><span class="det-lbl">Nombre</span><span class="det-val">${e.nombres} ${e.apellido_paterno} ${e.apellido_materno || ''}</span></div>
+    <div class="det-row"><span class="det-lbl">Mayores de 18</span><span class="det-val">${e.total_mayores_18 || 'No especificado'}</span></div>
     <div class="det-row"><span class="det-lbl">Teléfono</span><span class="det-val">${e.telefono || 'No proporcionado'}</span></div>
-    <div class="det-row"><span class="det-lbl">Dirección</span><span class="det-val">${e.calle}</span></div>
+    <div class="det-row"><span class="det-lbl">Dirección</span><span class="det-val">${e.calle}, Col. ${e.colonia || ''}</span></div>
     <div class="det-row"><span class="det-lbl">Sección</span><span class="det-val">${e.seccion}</span></div>
-    <div class="det-row"><span class="det-lbl">Simpatiza</span><span class="det-val">${e.partido_cual ? `Sí (${e.partido_cual})` : 'No'}</span></div>
-    <div class="det-row"><span class="det-lbl">Conoce Candidato</span><span class="det-val">${e.conoce_candidato ? (e.conoce_candidato === 'si' ? 'Sí' : 'No') : 'No responde'}</span></div>
+    
+    <div class="sec-tit" style="margin-top:16px">Cuestionario</div>
+    <div class="det-row"><span class="det-lbl">P1. Problema Principal</span><span class="det-val">${e.problema_principal || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P2. Atención Colonia</span><span class="det-val">${e.percepcion_atencion || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P3. Conoce Diputada</span><span class="det-val">${e.conoce_diputada || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P4. Evaluación Dip.</span><span class="det-val">${e.evaluacion_diputada || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P5. Cumplimiento Dip.</span><span class="det-val">${e.cumplimiento_diputada || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P6. Simpatía Partido</span><span class="det-val">${e.simpatia_politica || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P7. Conoce L. Emilio</span><span class="det-val">${e.conocimiento_luis_emilio || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P8. Canal L. Emilio</span><span class="det-val">${e.canal_posicionamiento || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P9. Voto Confianza</span><span class="det-val">${e.voto_confianza || '—'}</span></div>
+
+    <div class="sec-tit" style="margin-top:16px">Clasificación Interna</div>
+    <div class="det-row"><span class="det-lbl">Clasificación</span><span class="det-val">${e.clasificacion_interna || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">Prioridad Seguimiento</span><span class="det-val">${e.prioridad_seguimiento || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">Observaciones Internas</span><span class="det-val">${e.observaciones_internas || 'Ninguna'}</span></div>
+    
+    <div class="sec-tit" style="margin-top:16px">Otros Datos</div>
     <div class="det-row"><span class="det-lbl">Fecha</span><span class="det-val">${fecha.toLocaleDateString('es-MX')} a las ${fecha.toLocaleTimeString('es-MX')}</span></div>
-    <div class="det-row"><span class="det-lbl">Observaciones</span><span class="det-val">${e.observaciones || 'Ninguna'}</span></div>
   `;
 
   if (e.respuestas && Object.keys(e.respuestas).length) {

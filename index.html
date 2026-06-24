@@ -176,12 +176,24 @@
             <div class="form-hdr-s" id="fh-f"></div>
           </div>
 
-          <!-- SECCIÓN 1: DATOS DEL CIUDADANO -->
+          <div class="bv-card" style="margin-bottom: 24px; background: var(--bg-card); color: var(--text-main);">
+            <div style="font-weight: 800; color: var(--ppal); margin-bottom: 8px;">INTRODUCCIÓN PARA EL BRIGADISTA:</div>
+            <p style="font-size: 14px; line-height: 1.5; text-align: justify;">Buen día, venimos de parte del equipo de Luis Emilio, de Morena en el Distrito 3. Estamos haciendo una entrevista breve para conocer cómo está la colonia, qué problemas siguen sin atenderse y qué opinión tiene la gente sobre el trabajo que se ha hecho en el distrito. La idea es escuchar a los vecinos y ubicar dónde hace falta dar seguimiento. ¿Nos permite hacerle unas preguntas?</p>
+          </div>
+
+          <!-- SECCIÓN 1: DATOS DE CONTROL -->
           <div class="preg-card">
             <div class="preg-lbl">
               <div class="preg-num">1</div>
-              <div>Datos del ciudadano</div>
+              <div>Datos de control</div>
             </div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">El Folio de vivienda y Número de persona se generarán automáticamente al sincronizar con el servidor.</div>
+            
+            <div class="campo" style="margin-bottom:12px">
+              <label for="fn-total-18">Total de mayores de 18 años que viven en la vivienda <span class="req-mark">*</span></label>
+              <input type="number" id="fn-total-18" placeholder="Cantidad" min="1" inputmode="numeric">
+            </div>
+
             <div class="campo" style="margin-bottom:12px">
               <label for="fn-nombres">Nombre(s) <span class="req-mark">*</span></label>
               <input type="text" id="fn-nombres" placeholder="Nombre(s)">
@@ -196,7 +208,7 @@
                 <input type="text" id="fn-materno" placeholder="Materno">
               </div>
             </div>
-            <div style="display:flex;gap:12px;margin-bottom:0">
+            <div style="display:flex;gap:12px;margin-bottom:12px">
               <div class="campo" style="flex:1;margin-bottom:0">
                 <label for="fn-edad">Edad <span class="req-mark">*</span></label>
                 <input type="number" id="fn-edad" placeholder="Años" min="18" max="110" inputmode="numeric">
@@ -206,77 +218,191 @@
                 <input type="tel" id="fn-tel" placeholder="10 dígitos" maxlength="15">
               </div>
             </div>
-          </div>
-
-          <!-- SECCIÓN 2: UBICACIÓN -->
-          <div class="preg-card">
-            <div class="preg-lbl">
-              <div class="preg-num">2</div>
-              <div>Ubicación</div>
+            <div class="campo" style="margin-bottom:12px">
+              <label for="fn-colonia">Colonia <span class="req-mark">*</span></label>
+              <input type="text" id="fn-colonia" placeholder="Nombre de la colonia">
             </div>
             <div class="campo" style="margin-bottom:12px">
               <label for="fn-calle">Calle y número <span class="req-mark">*</span></label>
-              <input type="text" id="fn-calle" placeholder="Calle, número, colonia">
+              <input type="text" id="fn-calle" placeholder="Calle y número exterior/interior">
             </div>
-            <div class="campo">
+            <div class="campo" style="margin-bottom:0">
               <label for="fn-seccion">Sección Electoral <span class="req-mark">*</span></label>
               <input type="number" id="fn-seccion" placeholder="Sección" inputmode="numeric">
             </div>
           </div>
 
-          <!-- SECCIÓN 3: SIMPATÍA POLÍTICA -->
+          <!-- SECCIÓN 2: CUESTIONARIO -->
           <div class="preg-card">
             <div class="preg-lbl">
-              <div class="preg-num">3</div>
-              <div>¿Simpatiza con algún partido? <span class="req-mark">*</span></div>
+              <div class="preg-num">2</div>
+              <div>Cuestionario</div>
             </div>
-            <div class="opts opt-sino" style="margin-bottom:16px">
-              <button type="button" class="opt" id="opt-simpatiza-si" onclick="selOptSimpatiza('si')">✓ Sí</button>
-              <button type="button" class="opt" id="opt-simpatiza-no" onclick="selOptSimpatiza('no')">✗ No</button>
+
+            <div class="campo">
+              <label for="fn-p1">P1. ¿Cuál considera que es el principal problema de su colonia o zona? <span class="req-mark">*</span></label>
+              <select id="fn-p1" class="inp">
+                <option value="">-- Seleccione --</option>
+                <option value="Falta de agua o baja presión">Falta de agua o baja presión</option>
+                <option value="Calles en mal estado / baches">Calles en mal estado / baches</option>
+                <option value="Falta de luminarias">Falta de luminarias</option>
+                <option value="Basura o mala recolección">Basura o mala recolección</option>
+                <option value="Falta de limpieza en calles">Falta de limpieza en calles</option>
+                <option value="Parques o áreas verdes abandonadas">Parques o áreas verdes abandonadas</option>
+                <option value="Drenaje / alcantarillado">Drenaje / alcantarillado</option>
+                <option value="Inseguridad">Inseguridad</option>
+                <option value="Lotes baldíos o espacios abandonados">Lotes baldíos o espacios abandonados</option>
+                <option value="Otro">Otro</option>
+              </select>
             </div>
-            <div id="div-partido-cual" class="hidden">
-              <div class="campo" style="margin-bottom:0">
-                <label for="fn-partido-cual">¿Cuál partido? <span class="req-mark">*</span></label>
-                <select id="fn-partido-cual" class="inp">
-                  <option value="">-- Seleccione --</option>
-                  <option value="Morena">Morena</option>
-                  <option value="PAN">PAN</option>
-                  <option value="PRI">PRI</option>
-                  <option value="Otro">Otro</option>
-                </select>
+
+            <div class="campo">
+              <label for="fn-p2">P2. En general, ¿qué tan atendida siente que está su colonia por sus autoridades y representantes actuales? <span class="req-mark">*</span></label>
+              <select id="fn-p2" class="inp">
+                <option value="">-- Seleccione --</option>
+                <option value="Muy atendida">Muy atendida</option>
+                <option value="Algo atendida">Algo atendida</option>
+                <option value="Poco atendida">Poco atendida</option>
+                <option value="Nada atendida">Nada atendida</option>
+                <option value="No sabe / No responde">No sabe / No responde</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="fn-p3">P3. ¿Conoce o ha escuchado hablar de la diputada actual del Distrito 3? <span class="req-mark">*</span></label>
+              <select id="fn-p3" class="inp">
+                <option value="">-- Seleccione --</option>
+                <option value="Sí la conoce">Sí la conoce</option>
+                <option value="La ha escuchado mencionar">La ha escuchado mencionar</option>
+                <option value="No la conoce">No la conoce</option>
+                <option value="No sabe quién es">No sabe quién es</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="fn-p4">P4. ¿Qué opinión tiene del trabajo que ha realizado la diputada actual en el Distrito 3? <span class="req-mark">*</span></label>
+              <select id="fn-p4" class="inp">
+                <option value="">-- Seleccione --</option>
+                <option value="Buena">Buena</option>
+                <option value="Regular">Regular</option>
+                <option value="Mala">Mala</option>
+                <option value="No ha visto trabajo">No ha visto trabajo</option>
+                <option value="No sabe / No responde">No sabe / No responde</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="fn-p5">P5. ¿Considera que la diputada actual ha cumplido con lo que la gente esperaba para el Distrito 3? <span class="req-mark">*</span></label>
+              <select id="fn-p5" class="inp">
+                <option value="">-- Seleccione --</option>
+                <option value="Sí ha cumplido">Sí ha cumplido</option>
+                <option value="Ha cumplido en parte">Ha cumplido en parte</option>
+                <option value="Ha cumplido poco">Ha cumplido poco</option>
+                <option value="No ha cumplido">No ha cumplido</option>
+                <option value="No sabe / No responde">No sabe / No responde</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="fn-p6">P6. ¿Usted simpatiza actualmente con algún partido, movimiento o con ninguno? <span class="req-mark">*</span></label>
+              <select id="fn-p6" class="inp">
+                <option value="">-- Seleccione --</option>
+                <option value="Morena">Morena</option>
+                <option value="Movimiento Ciudadano">Movimiento Ciudadano</option>
+                <option value="PAN">PAN</option>
+                <option value="PRI">PRI</option>
+                <option value="Partido Verde">Partido Verde</option>
+                <option value="PT">PT</option>
+                <option value="Ninguno">Ninguno</option>
+                <option value="Prefiere no responder">Prefiere no responder</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+
+            <div class="campo" style="margin-top:24px; padding-top:16px; border-top:1px dashed var(--border);">
+              <div class="candidato-foto-wrap" style="margin-bottom: 12px">
+                <img src="img/candidato.jpg" alt="Luis Emilio" class="candidato-foto" onerror="this.style.display='none'">
+                <div class="candidato-nombre">Luis Emilio</div>
               </div>
+              <label for="fn-p7">P7. ¿Ha escuchado hablar de Luis Emilio, de Morena, aquí en el Distrito 3? <span class="req-mark">*</span></label>
+              <select id="fn-p7" class="inp">
+                <option value="">-- Seleccione --</option>
+                <option value="Sí, lo conoce">Sí, lo conoce</option>
+                <option value="Sí, lo ha escuchado mencionar">Sí, lo ha escuchado mencionar</option>
+                <option value="Poco">Poco</option>
+                <option value="No lo conoce todavía">No lo conoce todavía</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="fn-p8">P8. ¿Dónde ha visto, escuchado o recibido información de Luis Emilio? <span class="req-mark">*</span></label>
+              <select id="fn-p8" class="inp">
+                <option value="">-- Seleccione --</option>
+                <option value="Casa por casa">Casa por casa</option>
+                <option value="Redes sociales">Redes sociales</option>
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="Evento o reunión">Evento o reunión</option>
+                <option value="Gestión o apoyo en la colonia">Gestión o apoyo en la colonia</option>
+                <option value="Por vecinos o conocidos">Por vecinos o conocidos</option>
+                <option value="Lona, volante o perifoneo">Lona, volante o perifoneo</option>
+                <option value="No lo ha visto ni escuchado">No lo ha visto ni escuchado</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+
+            <div class="campo" style="margin-bottom:0">
+              <label for="fn-p9">P9. Tomando en cuenta los problemas que usted mencionó de su colonia y el trabajo que ha visto de la actual diputación, si Luis Emilio de Morena demuestra con hechos, gestiones concretas y seguimiento que sí puede atender al Distrito 3, ¿usted le daría un voto de confianza? <span class="req-mark">*</span></label>
+              <select id="fn-p9" class="inp">
+                <option value="">-- Seleccione --</option>
+                <option value="Sí, definitivamente">Sí, definitivamente</option>
+                <option value="Sí, podría considerarlo">Sí, podría considerarlo</option>
+                <option value="Depende de que vea resultados">Depende de que vea resultados</option>
+                <option value="No por ahora">No por ahora</option>
+                <option value="No">No</option>
+                <option value="Prefiere no responder">Prefiere no responder</option>
+              </select>
             </div>
           </div>
 
-          <!-- SECCIÓN 4: CANDIDATO con foto -->
+          <!-- SECCIÓN 3: CLASIFICACIÓN INTERNA -->
+          <div class="preg-card" style="border-left: 4px solid var(--ppal)">
+            <div class="preg-lbl">
+              <div class="preg-num">3</div>
+              <div>Clasificación Interna <span style="font-size:13px;color:var(--err);font-weight:700">(NO LEER)</span></div>
+            </div>
+            
+            <div class="campo">
+              <label for="fn-clasificacion">Clasificación del Brigadista <span class="req-mark">*</span></label>
+              <select id="fn-clasificacion" class="inp">
+                <option value="">-- Seleccione --</option>
+                <option value="A — Muy favorable a Luis Emilio">A — Muy favorable a Luis Emilio</option>
+                <option value="B — Potencial favorable / requiere seguimiento">B — Potencial favorable / requiere seguimiento</option>
+                <option value="C — Neutral / necesita más información">C — Neutral / necesita más información</option>
+                <option value="D — Difícil / rechazo / simpatía fuerte por otro proyecto">D — Difícil / rechazo / simpatía fuerte por otro proyecto</option>
+                <option value="E — No quiso responder / no localizado">E — No quiso responder / no localizado</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="fn-prioridad">Prioridad de Seguimiento <span class="req-mark">*</span></label>
+              <select id="fn-prioridad" class="inp">
+                <option value="">-- Seleccione --</option>
+                <option value="Alta">Alta</option>
+                <option value="Media">Media</option>
+                <option value="Baja">Baja</option>
+              </select>
+            </div>
+
+            <div class="campo" style="margin-bottom:0">
+              <label for="fn-observaciones">Observaciones Internas</label>
+              <textarea class="inp grande" id="fn-observaciones" placeholder="Comentario relevante..."></textarea>
+            </div>
+          </div>
+
+          <!-- SECCIÓN 4: EVIDENCIA FOTOGRÁFICA -->
           <div class="preg-card">
             <div class="preg-lbl">
               <div class="preg-num">4</div>
-              <div>¿Conoce a Luis Emilio?</div>
-            </div>
-            <div class="candidato-foto-wrap">
-              <img src="img/candidato.jpg" alt="Luis Emilio" class="candidato-foto" onerror="this.style.display='none'">
-              <div class="candidato-nombre">Luis Emilio</div>
-            </div>
-            <div class="opts opt-sino">
-              <button type="button" class="opt" id="opt-cand-si" onclick="selOptCandidato('si')">✓ Sí lo conoce</button>
-              <button type="button" class="opt" id="opt-cand-no" onclick="selOptCandidato('no')">✗ No lo conoce</button>
-            </div>
-          </div>
-
-          <!-- SECCIÓN 5: OBSERVACIONES -->
-          <div class="preg-card">
-            <div class="preg-lbl">
-              <div class="preg-num">5</div>
-              <div>Observaciones</div>
-            </div>
-            <textarea class="inp grande" id="fn-observaciones" placeholder="Detalles adicionales de la entrevista..."></textarea>
-          </div>
-
-          <!-- SECCIÓN 6: EVIDENCIA FOTOGRÁFICA -->
-          <div class="preg-card">
-            <div class="preg-lbl">
-              <div class="preg-num">6</div>
               <div>Evidencia Fotográfica <span style="font-size:13px;color:var(--text-muted);font-weight:400">(opcionales)</span></div>
             </div>
 
@@ -559,38 +685,76 @@
 
           <div class="est-grid">
 
-            <!-- GRÁFICA 1: ¿Conoce a Luis Emilio? -->
+            <!-- GRÁFICA 1: Problema Principal -->
             <div class="est-card">
               <div class="est-card-header">
-                <div class="est-card-titulo">👤 ¿Conoce a Luis Emilio?</div>
-                <div class="est-card-sub" id="est-emilio-total">Cargando...</div>
+                <div class="est-card-titulo">⚠️ Principal Problema</div>
+                <div class="est-card-sub" id="est-p1-total">Cargando...</div>
               </div>
               <div class="est-chart-wrap">
-                <canvas id="chart-emilio" aria-label="Gráfica conoce a Luis Emilio"></canvas>
+                <canvas id="chart-p1" aria-label="Gráfica problema principal"></canvas>
               </div>
-              <div class="est-legend" id="est-emilio-legend"></div>
-              <div class="est-acciones">
-                <button class="btn-sm ppal" onclick="imprimirListaEmilio('si')">🖨 Imprimir los que SÍ conocen</button>
-                <button class="btn-sm bord" onclick="imprimirListaEmilio('no')">🖨 Imprimir los que NO conocen</button>
-              </div>
+              <div class="est-legend" id="est-p1-legend"></div>
             </div>
 
-            <!-- GRÁFICA 2: Simpatía con partidos -->
+            <!-- GRÁFICA 2: Evaluación Diputada -->
             <div class="est-card">
               <div class="est-card-header">
-                <div class="est-card-titulo">🗳 Partidos con que Simpatizan</div>
-                <div class="est-card-sub" id="est-partido-total">Cargando...</div>
+                <div class="est-card-titulo">👩 Opinión Diputada Actual</div>
+                <div class="est-card-sub" id="est-p4-total">Cargando...</div>
               </div>
               <div class="est-chart-wrap">
-                <canvas id="chart-partidos" aria-label="Gráfica simpatía por partidos"></canvas>
+                <canvas id="chart-p4" aria-label="Gráfica evaluación diputada"></canvas>
               </div>
-              <div class="est-legend" id="est-partido-legend"></div>
-              <div class="est-acciones">
-                <button class="btn-sm ppal" onclick="imprimirListaPartido('Morena')">🖨 Lista Morena</button>
-                <button class="btn-sm bord" onclick="imprimirListaPartido('PAN')">🖨 Lista PAN</button>
-                <button class="btn-sm bord" onclick="imprimirListaPartido('PRI')">🖨 Lista PRI</button>
-                <button class="btn-sm bord" onclick="imprimirListaPartido('Otro')">🖨 Lista Otro</button>
+              <div class="est-legend" id="est-p4-legend"></div>
+            </div>
+
+            <!-- GRÁFICA 3: Simpatía Política -->
+            <div class="est-card">
+              <div class="est-card-header">
+                <div class="est-card-titulo">🗳️ Simpatía Partidista</div>
+                <div class="est-card-sub" id="est-p6-total">Cargando...</div>
               </div>
+              <div class="est-chart-wrap">
+                <canvas id="chart-p6" aria-label="Gráfica simpatía política"></canvas>
+              </div>
+              <div class="est-legend" id="est-p6-legend"></div>
+            </div>
+
+            <!-- GRÁFICA 4: Conocimiento Luis Emilio -->
+            <div class="est-card">
+              <div class="est-card-header">
+                <div class="est-card-titulo">👤 Conoce a Luis Emilio</div>
+                <div class="est-card-sub" id="est-p7-total">Cargando...</div>
+              </div>
+              <div class="est-chart-wrap">
+                <canvas id="chart-p7" aria-label="Gráfica conocimiento luis emilio"></canvas>
+              </div>
+              <div class="est-legend" id="est-p7-legend"></div>
+            </div>
+
+            <!-- GRÁFICA 5: Canal de Posicionamiento -->
+            <div class="est-card">
+              <div class="est-card-header">
+                <div class="est-card-titulo">📢 Canal de Información</div>
+                <div class="est-card-sub" id="est-p8-total">Cargando...</div>
+              </div>
+              <div class="est-chart-wrap">
+                <canvas id="chart-p8" aria-label="Gráfica canal posicionamiento"></canvas>
+              </div>
+              <div class="est-legend" id="est-p8-legend"></div>
+            </div>
+
+            <!-- GRÁFICA 6: Voto de Confianza -->
+            <div class="est-card">
+              <div class="est-card-header">
+                <div class="est-card-titulo">🤝 Voto de Confianza</div>
+                <div class="est-card-sub" id="est-p9-total">Cargando...</div>
+              </div>
+              <div class="est-chart-wrap">
+                <canvas id="chart-p9" aria-label="Gráfica voto confianza"></canvas>
+              </div>
+              <div class="est-legend" id="est-p9-legend"></div>
             </div>
 
           </div>
