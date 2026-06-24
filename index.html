@@ -228,7 +228,33 @@
             </div>
             <div class="campo" style="margin-bottom:0">
               <label for="fn-seccion">Sección Electoral <span class="req-mark">*</span></label>
-              <input type="number" id="fn-seccion" placeholder="Sección" inputmode="numeric">
+              <select id="fn-seccion" class="inp">
+                <option value="">-- Seleccione --</option>
+                <option value="39">39</option>
+                <option value="40">40</option>
+                <option value="41">41</option>
+                <option value="42">42</option>
+                <option value="43">43</option>
+                <option value="44">44</option>
+                <option value="45">45</option>
+                <option value="60">60</option>
+                <option value="61">61</option>
+                <option value="62">62</option>
+                <option value="63">63</option>
+                <option value="64">64</option>
+                <option value="65">65</option>
+                <option value="66">66</option>
+                <option value="67">67</option>
+                <option value="79">79</option>
+                <option value="80">80</option>
+                <option value="82">82</option>
+                <option value="83">83</option>
+                <option value="125">125</option>
+                <option value="563">563</option>
+                <option value="564">564</option>
+                <option value="565">565</option>
+                <option value="566">566</option>
+              </select>
             </div>
           </div>
 
@@ -257,20 +283,8 @@
             </div>
 
             <div class="campo">
-              <label for="fn-p2">P2. En general, ¿qué tan atendida siente que está su colonia por sus autoridades y representantes actuales? <span class="req-mark">*</span></label>
+              <label for="fn-p2">P2. ¿Conoce o ha escuchado hablar de la diputada actual del Distrito 3? <span class="req-mark">*</span></label>
               <select id="fn-p2" class="inp">
-                <option value="">-- Seleccione --</option>
-                <option value="Muy atendida">Muy atendida</option>
-                <option value="Algo atendida">Algo atendida</option>
-                <option value="Poco atendida">Poco atendida</option>
-                <option value="Nada atendida">Nada atendida</option>
-                <option value="No sabe / No responde">No sabe / No responde</option>
-              </select>
-            </div>
-
-            <div class="campo">
-              <label for="fn-p3">P3. ¿Conoce o ha escuchado hablar de la diputada actual del Distrito 3? <span class="req-mark">*</span></label>
-              <select id="fn-p3" class="inp">
                 <option value="">-- Seleccione --</option>
                 <option value="Sí la conoce">Sí la conoce</option>
                 <option value="La ha escuchado mencionar">La ha escuchado mencionar</option>
@@ -280,8 +294,8 @@
             </div>
 
             <div class="campo">
-              <label for="fn-p4">P4. ¿Qué opinión tiene del trabajo que ha realizado la diputada actual en el Distrito 3? <span class="req-mark">*</span></label>
-              <select id="fn-p4" class="inp">
+              <label for="fn-p3">P3. ¿Qué opinión tiene del trabajo que ha realizado la diputada actual en el Distrito 3? <span class="req-mark">*</span></label>
+              <select id="fn-p3" class="inp">
                 <option value="">-- Seleccione --</option>
                 <option value="Buena">Buena</option>
                 <option value="Regular">Regular</option>
@@ -292,8 +306,8 @@
             </div>
 
             <div class="campo">
-              <label for="fn-p5">P5. ¿Considera que la diputada actual ha cumplido con lo que la gente esperaba para el Distrito 3? <span class="req-mark">*</span></label>
-              <select id="fn-p5" class="inp">
+              <label for="fn-p4">P4. ¿Considera que la diputada actual ha cumplido con lo que la gente esperaba para el Distrito 3? <span class="req-mark">*</span></label>
+              <select id="fn-p4" class="inp">
                 <option value="">-- Seleccione --</option>
                 <option value="Sí ha cumplido">Sí ha cumplido</option>
                 <option value="Ha cumplido en parte">Ha cumplido en parte</option>
@@ -304,8 +318,8 @@
             </div>
 
             <div class="campo">
-              <label for="fn-p6">P6. ¿Usted simpatiza actualmente con algún partido, movimiento o con ninguno? <span class="req-mark">*</span></label>
-              <select id="fn-p6" class="inp">
+              <label for="fn-p5">P5. ¿Usted simpatiza actualmente con algún partido, movimiento o con ninguno? <span class="req-mark">*</span></label>
+              <select id="fn-p5" class="inp">
                 <option value="">-- Seleccione --</option>
                 <option value="Morena">Morena</option>
                 <option value="Movimiento Ciudadano">Movimiento Ciudadano</option>
@@ -324,8 +338,8 @@
                 <img src="img/candidato.jpg" alt="Luis Emilio" class="candidato-foto" onerror="this.style.display='none'">
                 <div class="candidato-nombre">Luis Emilio</div>
               </div>
-              <label for="fn-p7">P7. ¿Ha escuchado hablar de Luis Emilio, de Morena, aquí en el Distrito 3? <span class="req-mark">*</span></label>
-              <select id="fn-p7" class="inp">
+              <label for="fn-p6">P6. ¿Ha escuchado hablar de Luis Emilio, de Morena, aquí en el Distrito 3? <span class="req-mark">*</span></label>
+              <select id="fn-p6" class="inp">
                 <option value="">-- Seleccione --</option>
                 <option value="Sí, lo conoce">Sí, lo conoce</option>
                 <option value="Sí, lo ha escuchado mencionar">Sí, lo ha escuchado mencionar</option>
@@ -335,8 +349,8 @@
             </div>
 
             <div class="campo">
-              <label for="fn-p8">P8. ¿Dónde ha visto, escuchado o recibido información de Luis Emilio? <span class="req-mark">*</span></label>
-              <select id="fn-p8" class="inp">
+              <label for="fn-p7">P7. ¿Dónde ha visto, escuchado o recibido información de Luis Emilio? <span class="req-mark">*</span></label>
+              <select id="fn-p7" class="inp">
                 <option value="">-- Seleccione --</option>
                 <option value="Casa por casa">Casa por casa</option>
                 <option value="Redes sociales">Redes sociales</option>
@@ -351,8 +365,8 @@
             </div>
 
             <div class="campo" style="margin-bottom:0">
-              <label for="fn-p9">P9. Tomando en cuenta los problemas que usted mencionó de su colonia y el trabajo que ha visto de la actual diputación, si Luis Emilio de Morena demuestra con hechos, gestiones concretas y seguimiento que sí puede atender al Distrito 3, ¿usted le daría un voto de confianza? <span class="req-mark">*</span></label>
-              <select id="fn-p9" class="inp">
+              <label for="fn-p8">P8. Tomando en cuenta los problemas que usted mencionó de su colonia y el trabajo que ha visto de la actual diputación, si Luis Emilio de Morena demuestra con hechos, gestiones concretas y seguimiento que sí puede atender al Distrito 3, ¿usted le daría un voto de confianza? <span class="req-mark">*</span></label>
+              <select id="fn-p8" class="inp">
                 <option value="">-- Seleccione --</option>
                 <option value="Sí, definitivamente">Sí, definitivamente</option>
                 <option value="Sí, podría considerarlo">Sí, podría considerarlo</option>
@@ -383,15 +397,7 @@
               </select>
             </div>
 
-            <div class="campo">
-              <label for="fn-prioridad">Prioridad de Seguimiento <span class="req-mark">*</span></label>
-              <select id="fn-prioridad" class="inp">
-                <option value="">-- Seleccione --</option>
-                <option value="Alta">Alta</option>
-                <option value="Media">Media</option>
-                <option value="Baja">Baja</option>
-              </select>
-            </div>
+
 
             <div class="campo" style="margin-bottom:0">
               <label for="fn-observaciones">Observaciones Internas</label>
