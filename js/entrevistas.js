@@ -325,6 +325,7 @@ async function guardarEnt() {
     ok = false;
   }
   checkReq(nombres, 'fn-nombres');
+  checkReq(telefono, 'fn-tel');
   checkReq(paterno, 'fn-paterno');
   if (!edad || edad < 18 || edad > 110) {
     $('fn-edad')?.classList.add('preg-err');
