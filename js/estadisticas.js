@@ -6,7 +6,6 @@
 // ================================================================
 
 let chartP1Instance = null;
-let chartP4Instance = null;
 let chartP6Instance = null;
 let chartP7Instance = null;
 let chartP8Instance = null;
@@ -17,19 +16,18 @@ let datosEstadisticas = null;
 const COLORES = ['#7b1c3e', '#e07b00', '#2d9f5c', '#003087', '#d9534f', '#6c757d', '#17a2b8', '#ffc107', '#6f42c1', '#fd7e14'];
 
 async function cargarEstadisticas() {
-  const totIds = ['est-p1-total', 'est-p4-total', 'est-p6-total', 'est-p7-total', 'est-p8-total', 'est-p9-total'];
+  const totIds = ['est-p1-total', 'est-p6-total', 'est-p7-total', 'est-p8-total', 'est-p9-total'];
   totIds.forEach(id => { if ($(id)) $(id).textContent = 'Cargando datos...'; });
 
   try {
     const { data, error } = await sb.from('entrevistas')
-      .select('problema_principal, evaluacion_diputada, simpatia_politica, conocimiento_luis_emilio, canal_posicionamiento, voto_confianza')
+      .select('problema_principal, simpatia_politica, conocimiento_luis_emilio, canal_posicionamiento, voto_confianza')
       .order('fecha_entrevista', { ascending: false });
 
     if (error) throw error;
     datosEstadisticas = data || [];
 
     _renderChart('p1', 'problema_principal', 'doughnut', chartP1Instance, i => chartP1Instance = i);
-    _renderChart('p4', 'evaluacion_diputada', 'doughnut', chartP4Instance, i => chartP4Instance = i);
     _renderChart('p6', 'simpatia_politica', 'doughnut', chartP6Instance, i => chartP6Instance = i);
     _renderChart('p7', 'conocimiento_luis_emilio', 'doughnut', chartP7Instance, i => chartP7Instance = i);
     _renderChart('p8', 'canal_posicionamiento', 'doughnut', chartP8Instance, i => chartP8Instance = i);

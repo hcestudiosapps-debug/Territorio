@@ -101,7 +101,6 @@ function abrirForm() {
   if ($('fn-p5')) $('fn-p5').value = '';
   if ($('fn-p6')) $('fn-p6').value = '';
   if ($('fn-p7')) $('fn-p7').value = '';
-  if ($('fn-p8')) $('fn-p8').value = '';
   if ($('fn-clasificacion')) $('fn-clasificacion').value = '';
   if ($('fn-observaciones')) $('fn-observaciones').value = '';
 
@@ -304,7 +303,6 @@ async function guardarEnt() {
   const p5 = $('fn-p5').value;
   const p6 = $('fn-p6').value;
   const p7 = $('fn-p7').value;
-  const p8 = $('fn-p8').value;
   const clasificacion = $('fn-clasificacion').value;
   const observaciones = $('fn-observaciones').value.trim();
 
@@ -343,7 +341,6 @@ async function guardarEnt() {
   checkReq(p5, 'fn-p5');
   checkReq(p6, 'fn-p6');
   checkReq(p7, 'fn-p7');
-  checkReq(p8, 'fn-p8');
   checkReq(clasificacion, 'fn-clasificacion');
 
   // Recolectar respuestas a preguntas dinámicas
@@ -421,12 +418,11 @@ async function guardarEnt() {
     seccion: seccion,
     problema_principal: p1,
     conoce_diputada: p2,
-    evaluacion_diputada: p3,
-    cumplimiento_diputada: p4,
-    simpatia_politica: p5,
-    conocimiento_luis_emilio: p6,
-    canal_posicionamiento: p7,
-    voto_confianza: p8,
+    cumplimiento_diputada: p3,
+    simpatia_politica: p4,
+    conocimiento_luis_emilio: p5,
+    canal_posicionamiento: p6,
+    voto_confianza: p7,
     clasificacion_interna: clasificacion,
     observaciones_internas: observaciones || null,
     foto_casa: fotosData['casa'] || null,
@@ -574,12 +570,11 @@ function verDetEnt(idx) {
     <div class="sec-tit" style="margin-top:16px">Cuestionario</div>
     <div class="det-row"><span class="det-lbl">P1. Problema Principal</span><span class="det-val">${e.problema_principal || '—'}</span></div>
     <div class="det-row"><span class="det-lbl">P2. Conoce Diputada</span><span class="det-val">${e.conoce_diputada || '—'}</span></div>
-    <div class="det-row"><span class="det-lbl">P3. Evaluación Dip.</span><span class="det-val">${e.evaluacion_diputada || '—'}</span></div>
-    <div class="det-row"><span class="det-lbl">P4. Cumplimiento Dip.</span><span class="det-val">${e.cumplimiento_diputada || '—'}</span></div>
-    <div class="det-row"><span class="det-lbl">P5. Simpatía Partido</span><span class="det-val">${e.simpatia_politica || '—'}</span></div>
-    <div class="det-row"><span class="det-lbl">P6. Conoce L. Emilio</span><span class="det-val">${e.conocimiento_luis_emilio || '—'}</span></div>
-    <div class="det-row"><span class="det-lbl">P7. Canal L. Emilio</span><span class="det-val">${e.canal_posicionamiento || '—'}</span></div>
-    <div class="det-row"><span class="det-lbl">P8. Voto Confianza</span><span class="det-val">${e.voto_confianza || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P3. Cumplimiento Dip.</span><span class="det-val">${e.cumplimiento_diputada || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P4. Simpatía Partido</span><span class="det-val">${e.simpatia_politica || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P5. Conoce L. Emilio</span><span class="det-val">${e.conocimiento_luis_emilio || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P6. Canal L. Emilio</span><span class="det-val">${e.canal_posicionamiento || '—'}</span></div>
+    <div class="det-row"><span class="det-lbl">P7. Voto Confianza</span><span class="det-val">${e.voto_confianza || '—'}</span></div>
 
     <div class="sec-tit" style="margin-top:16px">Clasificación Interna</div>
     <div class="det-row"><span class="det-lbl">Clasificación</span><span class="det-val">${e.clasificacion_interna || '—'}</span></div>
