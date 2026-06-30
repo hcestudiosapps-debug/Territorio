@@ -368,6 +368,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (action === 'toggle-usr') {
       const activeState = btn.dataset.activo === 'true';
       toggleActivo(id, !activeState);
+    } else if (action === 'del-usr') {
+      eliminarUsr(id);
     }
   });
 

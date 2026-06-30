@@ -434,6 +434,7 @@ async function adminUsrs() {
           <button class="btn-sm ${u.activo ? 'rojo' : 'ok'}" data-action="toggle-usr" data-id="${u.id}" data-activo="${u.activo}">
             ${u.activo ? 'Desactivar' : 'Activar'}
           </button>
+          <button class="btn-sm rojo" data-action="del-usr" data-id="${u.id}">Eliminar</button>
         </div>
       </div>
     `).join('');
@@ -448,6 +449,7 @@ function abrirModalUsr(id) {
   $('mu-n').value = usr?.nombre || '';
   $('mu-u').value = usr?.user_login || '';
   $('mu-p').value = '';
+  $('mu-t').value = usr?.telefono || '';
   $('mu-r').value = usr?.rol || 'entrevistador';
   $('mu-m').value = usr?.meta || '';
   $('mu-activo').checked = usr ? usr.activo : true;
@@ -461,6 +463,7 @@ async function guardarUsr() {
   const datos = {
     nombre: $('mu-n').value.trim(),
     user_login: $('mu-u').value.trim().toLowerCase(),
+    telefono: $('mu-t').value.trim(),
     rol: $('mu-r').value,
     meta: parseInt($('mu-m').value) || 0,
     activo: $('mu-activo').checked
@@ -500,6 +503,21 @@ async function toggleActivo(id, nuevoEstado) {
       adminUsrs();
     } else toast('Error al cambiar estado');
   } catch (e) { toast('Error de conexión'); }
+}
+
+async function eliminarUsr(id) {
+  if (!confirm('¿Eliminar este usuario? Esta acción no se puede deshacer y borrará también sus entrevistas (si están vinculadas en cascada).')) return;
+  try {
+    const { error } = await sb.from('usuarios').delete().eq('id', id);
+    if (!error) {
+      toast('Usuario eliminado');
+      adminUsrs();
+    } else {
+      toast('Error al eliminar');
+    }
+  } catch (e) {
+    toast('Error de conexión');
+  }
 }
 
 // ================================================================
